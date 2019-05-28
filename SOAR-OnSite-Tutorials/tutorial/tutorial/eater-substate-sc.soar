@@ -1,0 +1,35 @@
+sp {hierarchical*elaborate*map-object*reward
+   (state <s> ^name eater)
+-->
+   (<s> ^color-values <r>)
+   (<r> ^wall -10
+        ^empty 0
+        ^red 5
+        ^purple 10
+        ^green 15
+        ^blue 20)}
+
+sp {eater*propose*move
+   (state <s> ^name eater
+              ^io.input-link <input>)
+   (<input> ^{ << west east north south >> <dir> } 
+                                   { <> wall <color> }) 
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name move
+        ^direction <dir>
+        ^color <color>)}
+
+sp {eater*select*move*operator*indifferent
+   (state <s> ^operator <o> +                               
+              ^color-values.<color> <value>)    
+   (<o> ^name move
+        ^color <color>)
+-->
+   (<s> ^operator <o> = <value>)}
+
+
+
+
+
+

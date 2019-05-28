@@ -1,0 +1,40 @@
+rl -s learning on
+indiff -b  
+
+sp {random*propose*forward
+   (state <s> ^name eater
+              ^io.input-link.time)
+-->
+   (<s> ^operator <op> +)
+   (<op> ^name forward)}
+
+sp {random*propose*rotate
+   (state <s> ^name eater
+              ^io.input-link.time)
+-->
+   (<s> ^operator <op> +)
+   (<op> ^name rotate)}
+
+gp {eater*evaluate*forward
+   (state <s> ^name eater
+              ^io.input-link.front [ red wall blue empty green purple ]
+              ^operator <op1> +)
+   (<op1> ^name forward)
+-->
+   (<s> ^operator <op1> = 0.0)}
+
+gp {eater*evaluate*rotate
+   (state <s> ^name eater
+              ^io.input-link.front [ red wall blue empty green purple ]
+              ^operator <op1> +)
+   (<op1> ^name rotate)
+-->
+   (<s> ^operator <op1> = 0.0)}
+
+sp {eater*elaborate*state
+   (state <s> ^name eater
+              ^reward-link <rl>
+              ^io.input-link.score-diff <d>)
+-->
+   (<rl> ^reward.value <d>)
+}

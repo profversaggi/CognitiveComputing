@@ -1,0 +1,51 @@
+sp {random*propose*forward
+   (state <s> ^name eater
+              ^io.input-link.front)    # will blink 
+-->
+   (<s> ^operator <op> + =)
+   (<op> ^name forward)}
+
+sp {apply*forward
+   (state <s> ^operator <op>
+              ^io.output-link <out>)
+   (<op> ^name forward)
+-->
+   (<out> ^forward <f>)}
+
+sp {random*propose*rotate
+   (state <s> ^name eater
+              ^io.input-link.front) # will blink 
+-->
+   (<s> ^operator <op> + =)
+   (<op> ^name rotate)}
+
+sp {apply*rotate
+   (state <s> ^operator <op>
+              ^io.output-link <out>)
+   (<op> ^name rotate)
+-->
+   (<out> ^rotate <r>)}
+
+sp {task*complete
+   (state <s> ^name eater
+              ^io.input-link.food-remaining 0)
+-->
+   (halt)
+}
+
+sp {eater*reject*forward*wall
+   (state <s> ^operator <o> +
+              ^io.input-link.front wall)
+   (<o> ^name forward)
+-->
+   (<s> ^operator <o> -)}
+
+sp {eater*avoid*forward*empty
+   (state <s> ^operator <o> +
+              ^io.input-link <input>)
+   (<input> ^<< back left right >> { <> empty <> wall }
+            ^front empty)
+   (<o> ^name forward)
+-->
+   (<s> ^operator <o> <)}
+

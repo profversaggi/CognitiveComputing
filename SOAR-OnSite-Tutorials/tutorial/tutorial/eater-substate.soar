@@ -1,0 +1,68 @@
+#If in the hierarchical-eater and
+#    in direction <dir> there is a non-wall
+##then
+#    propose move in direction <dir> 
+
+sp {eater*propose*move
+   (state <s> ^name eater
+              ^io.input-link <input>)
+   (<input> ^{ << west east north south >> <dir> } <> wall)    
+-->
+   (<s> ^operator <op> + =)
+   (<op> ^name move
+         ^direction <dir>)}
+
+sp {eater*monitor*move
+   (state <s> ^name eater
+              ^operator <op>)
+   (<op> ^name move
+         ^direction <dir>)
+-->
+(write (crlf) |Move direction: | <dir>)}
+
+sp {task*complete
+   (state <s> ^name eater
+              ^io.input-link.food-remaining 0)
+-->
+   (halt)
+}
+
+### Substate
+
+sp {move*propose*rotate
+   (state <s> ^superstate <ss>)
+   (<ss> ^operator <o>
+         ^io.input-link.orientation <dir>)
+   (<o> ^name move
+        ^direction <> <dir>)
+-->
+   (<s> ^operator <op> + =)
+   (<op> ^name rotate)}
+
+sp {apply*rotate
+   (state <s> ^operator.name rotate
+              ^superstate.io.output-link <out>)
+  -(<out> ^rotate)
+-->
+   (<out> ^rotate <r>)}
+
+# If facing direction of move (in superstate), propose forward.
+sp {move*propose*forward
+   (state <s> ^name move
+              ^superstate.operator.direction <dir>
+              ^io.input-link.orientation <dir>)
+ -->
+   (<s> ^operator <op> + =)
+   (<op> ^name forward)}
+sp {apply*forward
+   (state <s> ^operator.name forward
+              ^io.output-link <out>)
+  -(<out> ^forward)
+-->
+   (<out> ^forward <r>)}
+
+
+
+
+
+

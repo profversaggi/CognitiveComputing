@@ -1,0 +1,35 @@
+rl -s learning on
+indiff -b   # use greedy decision making 
+
+sp {eater*propose*move
+   (state <s> ^name eater
+              ^io.input-link <input>)
+   (<input> ^{ << west east north south >> <dir>} 
+                  { <> wall <color>})    
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name move
+        ^direction <dir>
+        ^color <color>)}
+
+gp {eater*select*move
+   (state <s> ^name eater
+              ^operator <o> +)
+   (<o> ^name move
+        ^color [ purple red blue green empty ] )
+-->
+   (<s> ^operator <o> = 0)}
+
+sp {RL*elaborate*state         # same as in normal RL
+   (state <s> ^name eater
+              ^reward-link <rl>
+              ^io.input-link.score-diff <d>)
+-->
+   (<rl> ^reward.value <d>)}
+
+sp {task*complete
+   (state <s> ^name eater
+              ^io.input-link.food-remaining 0)
+-->
+   (halt)
+}
